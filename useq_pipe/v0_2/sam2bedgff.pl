@@ -5,6 +5,8 @@
 # sam2bedgff.pl - to be run on filtered sam files. convert to bed/gff with only unique reads included
 #################################################################
 
+
+#command used to run: perl scriptsGareth/sam2bedgff.pl newTest/sample1_filter.sam sample1 Mouse 36 0 1 newTest/Output/sample1.bed
 use strict;
 use File::Basename;
 
@@ -19,6 +21,7 @@ my $se = shift;
 my $bed = shift;
 my $path2output = shift;
 
+#Determining number of chromosomes based on species
 my @chroms;
 if ($species eq "Mouse")
 {
@@ -40,6 +43,7 @@ my $total_rep = 0;
 my $total_read = 0;
 my $failed_qc = 0;
 
+#What is the point of this if statement??
 if ($bed == 1)
 {
 	open (OUT ,">$path2output") or die "Can't open $path2output for writing";
@@ -49,6 +53,30 @@ else
 	open (OUT ,">$path2output") or die "Can't open $path2output for writing";
 }
 
+#Separate chromosomes into individual temporary files
+my $chrTemp;
+$chrTemp = $path2sam;
+$chrTemp =~ s/\.sam/\_chr/;
+
+print "Creating temporary chromosome files\n";
+if ($species ne "single")
+{
+	open (IN, "$path2sam" ) or die "Can't open $path2sam for reading";
+	while (my $line = <IN>)
+	{
+		my @elems = split/\t/,$line;
+		my $chrom = $elems[2];
+			
+		$chrTemp = $chrTemp."_".$chrom.".sam";
+		open (OUT2 ,">>$chrTemp") or die "Can't open $chrTemp for writing";
+		print OUT2 $line;
+		close OUT2;
+		$chrTemp =~ s/\_$chrom.sam//;
+	}
+	close IN;
+}
+
+print "Creating .bed file\n";
 foreach my $chr (@chroms)
 {
 	my $count_rep = 0;
@@ -56,8 +84,18 @@ foreach my $chr (@chroms)
 	print "$chr\n";
 	
 	my (%posh,%out_hash,%qual_h);
-	open (IN, "$path2sam" ) or die "Can't open $path2sam for reading";
-	while (my $line = <IN>)
+	
+	#Go through each chromosome file unless it is a single chromosome dataset
+	if ($species ne "single")
+	{
+		$chrTemp = $chrTemp."_".$chr.".sam";
+		open (IN2, "$chrTemp" ) or die "Can't open $chrTemp for reading";
+	}
+	else
+	{
+		open (IN2, "$path2sam" ) or die "Can't open $path2sam for reading";
+	}	
+	while (my $line = <IN2>)
 	{
 		my @elems = split/\t/,$line;
 		my $read_id = $elems[0];
@@ -66,12 +104,12 @@ foreach my $chr (@chroms)
 		my $flags = $elems[1];
 		my $qual = $elems[4];
 		my $strand;
+
 		if ($qual < 10)
 		{
 			$qual = "0".$qual;
 		}
-		if ($chrom eq $chr || $species eq "single")
-		{
+
 		if (exists $posh{$read_id})
 		{
 			if ($qual >= 10 || $qual_h{$read_id} >= 10)
@@ -164,13 +202,10 @@ foreach my $chr (@chroms)
 				$qual_h{$read_id} = $qual;
 			}
 		}
-		}
-		else
-		{
-			next;
-		}
+
 	}
-	close IN;
+	close IN2;
+	$chrTemp =~ s/\_$chr.sam//;
 	my %new_hash;
 	foreach my $key (keys %out_hash)
 	{
@@ -186,7 +221,15 @@ foreach my $chr (@chroms)
 	$total_rep +=$count_rep;
 	$total_read +=$count_reads;
 }
+
 print "Total reads = $total_read\n";
 print "Total repeated = $total_rep\n";
 print "Failed QC (q<10) = $failed_qc\n";
 close OUT;
+
+foreach my $chr (@chroms)
+{
+	$chrTemp = $chrTemp."_".$chr.".sam";
+	unlink $chrTemp or die "Can't delete $chrTemp";
+	$chrTemp =~ s/\_$chr.sam//;
+}
