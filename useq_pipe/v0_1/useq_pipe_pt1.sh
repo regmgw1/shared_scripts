@@ -1,0 +1,25 @@
+#!/bin/bash
+
+PICARD_HOME=/usr/local/bioinf/picard-tools-1.27
+REFERENCE=/san1_data/genomic_data/mouse/NCBI_37/mouse_genome_37.fa
+PERL_SCRIPTS=/home/POGBDOM/regmgw1/useq_pipe/
+NAME=`echo $1 |sed 's/\.sam$//'`
+SPECIES=$2
+READ_LENGTH=$3
+PATH2INPUT=$4
+PATH2OUTPUT=$5
+
+java -Xmx16G -jar $PICARD_HOME/ValidateSamFile.jar INPUT=$PATH2INPUT/$NAME.bam OUTPUT=$PATH2OUTPUT/$NAME.check MODE=SUMMARY MAX_RECORDS_IN_RAM=1500000
+# stats collection
+java -Xmx16G -jar $PICARD_HOME/MeanQualityByCycle.jar INPUT=$PATH2INPUT/$NAME.bam OUTPUT=$PATH2OUTPUT/$NAME.cyclestats CHART_OUTPUT=$PATH2OUTPUT/$NAME.cyclestats.pdf MAX_RECORDS_IN_RAM=1500000
+java -Xmx16G -jar $PICARD_HOME/QualityScoreDistribution.jar INPUT=$PATH2INPUT/$NAME.bam OUTPUT=$PATH2OUTPUT/$NAME.qstats CHART_OUTPUT=$PATH2OUTPUT/$NAME.qstats.pdf MAX_RECORDS_IN_RAM=1500000
+java -Xmx16G -jar $PICARD_HOME/CollectInsertSizeMetrics.jar INPUT=$PATH2INPUT/$NAME.bam OUTPUT=$PATH2OUTPUT/$NAME.sizestats HISTOGRAM_FILE=$PATH2OUTPUT/$NAME.sizestats.pdf MAX_RECORDS_IN_RAM=1500000
+java -Xmx16G -jar $PICARD_HOME/CollectAlignmentSummaryMetrics.jar INPUT=$PATH2INPUT/$NAME.bam OUTPUT=$PATH2OUTPUT/$NAME.algnstats REFERENCE_SEQUENCE=$REFERENCE MAX_INSERT_SIZE=500 VALIDATION_STRINGENCY=LENIENT MAX_RECORDS_IN_RAM=1500000
+# excluded: throws exception
+#java -Xmx4G -jar $PICARD_HOME/CollectGcBiasMetrics.jar INPUT=$NAME.bam OUTPUT=$NAME.gcstats REFERENCE_SEQUENCE=$REFERENCE CHART_OUTPUT=$NAME.gcstats.pdf VALIDATION_STRINGENCY=LENIENT
+# excluded: throws exception
+#java -Xmx4G -jar $PICARD_HOME/EstimateLibraryComplexity.jar INPUT=$NAME.bam OUTPUT=$NAME.libstats VALIDATION_STRINGENCY=LENIENT
+
+# convert to BED6
+$PERL_SCRIPTS/sam2bedgff.pl $PATH2INPUT/${NAME}_filter.sam $NAME $SPECIES $READ_LENGTH 0 1 $PATH2OUTPUT/$NAME.bed 
+
