@@ -21,19 +21,24 @@ my $se = shift;
 my $bed = shift;
 my $path2output = shift;
 
+my $headerSize =0;
+
 #Determining number of chromosomes based on species
 my @chroms;
 if ($species eq "Mouse")
 {
 	@chroms = (1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,'X','Y');
+	$headerSize = 22;
 }
 elsif ($species eq "Human")
 {
 	@chroms = (1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,'X','Y');
+	$headerSize = 25;
 }
 elsif ($species eq "single")
 {
 	@chroms = (1);
+	$headerSize = 0;
 }
 else
 {
@@ -42,16 +47,9 @@ else
 my $total_rep = 0;
 my $total_read = 0;
 my $failed_qc = 0;
+my $count_lines = 0;
 
-#What is the point of this if statement??
-if ($bed == 1)
-{
-	open (OUT ,">$path2output") or die "Can't open $path2output for writing";
-}
-else
-{
-	open (OUT ,">$path2output") or die "Can't open $path2output for writing";
-}
+open (OUT ,">$path2output") or die "Can't open $path2output for writing";
 
 #Separate chromosomes into individual temporary files
 my $chrTemp;
@@ -202,7 +200,7 @@ foreach my $chr (@chroms)
 				$qual_h{$read_id} = $qual;
 			}
 		}
-
+	$count_lines ++;
 	}
 	close IN2;
 	$chrTemp =~ s/\_$chr.sam//;
@@ -221,10 +219,15 @@ foreach my $chr (@chroms)
 	$total_rep +=$count_rep;
 	$total_read +=$count_reads;
 }
+my $aligned = ($count_lines-$headerSize)/2;
+my $final_reads = $total_read-$total_rep;
 
-print "Total reads = $total_read\n";
-print "Total repeated = $total_rep\n";
+print "\n"; #Total Reads = \n";
+print "Aligned = $aligned\n";
 print "Failed QC (q<10) = $failed_qc\n";
+print "High Quality aligned reads = $total_read\n";
+print "Total repeated = $total_rep\n";
+print "Final Reads (nonclonal) = $final_reads\n";
 close OUT;
 
 foreach my $chr (@chroms)
