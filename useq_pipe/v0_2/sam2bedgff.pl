@@ -21,24 +21,19 @@ my $se = shift;
 my $bed = shift;
 my $path2output = shift;
 
-my $headerSize =0;
-
 #Determining number of chromosomes based on species
 my @chroms;
 if ($species eq "Mouse")
 {
 	@chroms = (1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,'X','Y');
-	$headerSize = 22;
 }
 elsif ($species eq "Human")
 {
 	@chroms = (1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,'X','Y');
-	$headerSize = 25;
 }
 elsif ($species eq "single")
 {
 	@chroms = (1);
-	$headerSize = 0;
 }
 else
 {
@@ -53,8 +48,10 @@ open (OUT ,">$path2output") or die "Can't open $path2output for writing";
 
 #Separate chromosomes into individual temporary files
 my $chrTemp;
-$chrTemp = $path2sam;
-$chrTemp =~ s/\.sam/\_chr/;
+#$chrTemp = $path2sam;
+#$chrTemp =~ s/\.sam/\_chr/;
+$chrTemp = $path2output;
+$chrTemp =~ s/\.(bed|gff)/\_chr/;
 
 print "Creating temporary chromosome files\n";
 if ($species ne "single")
@@ -97,6 +94,7 @@ foreach my $chr (@chroms)
 	{
 		my @elems = split/\t/,$line;
 		my $read_id = $elems[0];
+		$read_id =~s/\/3$//;
 		my $chrom = $elems[2];
 		my $pos = $elems[3];
 		my $flags = $elems[1];
@@ -219,7 +217,7 @@ foreach my $chr (@chroms)
 	$total_rep +=$count_rep;
 	$total_read +=$count_reads;
 }
-my $aligned = ($count_lines-$headerSize)/2;
+my $aligned = $count_lines/2;
 my $final_reads = $total_read-$total_rep;
 
 print "\n"; #Total Reads = \n";
