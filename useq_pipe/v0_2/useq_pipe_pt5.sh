@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # $1 = useq_output_folder
-# $2 = path2genome_dir
+# $2 = path2genome_fa
 # $3 = path2genes_gff
 # $4 = upstream nearest gene threshold (e.g. 10000)
 # $5 = downstream nearest gene threshold (e.g. 5000)
@@ -22,7 +22,7 @@ mkdir ${11}
 echo $WORKING
 echo "$DATE
 useq_output_folder = $1
-path2genome_dir = $2
+path2genome_fa = $2
 path2genes_gff = $3
 upstream nearest gene threshold (e.g. 10000) = $4
 downstream nearest gene threshold (e.g. 5000) = $5
