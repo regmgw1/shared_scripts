@@ -1,7 +1,7 @@
 #!/bin/bash
 
 USEQ_HOME=/usr/local/bioinf/USeq_6.8/Apps
-PERL_SCRIPTS=/home/POGBDOM/regmgw1/useq_pipe/v0_2/
+PERL_SCRIPTS=$3
 REFNAME=hg19
 FILTERED_NAME=`echo $1 |sed 's/\.sam$//'`
 PATH2INPUT=$2
