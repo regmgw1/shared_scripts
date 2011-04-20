@@ -47,7 +47,7 @@ close IN;
 foreach my $peaksub (@peak_subs)
 {
 	open (OUT, ">$path2output/$peaksub"."_peak_cg.txt") or die "Can't open $path2output/$peaksub"."_peak_cg.txt for writing";
-	print OUT "DMR\tLength\tCpG_count\tCpG_density\tC_count\tC_density\tBH_Cords\tBH_Length\tBH_CpG_count\tBH_CpG_density\tBH_C_count\tBH_C_density\tBH_FDR\tBH_Log2\tNear_gene_ID_up_$up"."_down_$down\tGene_coords\tStrand\n";
+	print OUT "DMR_chr\tDMR_start\tDMR_stop\tLength\tCpG_count\tCpG_density\tC_count\tC_density\tBH_Cords\tBH_Length\tBH_CpG_count\tBH_CpG_density\tBH_C_count\tBH_C_density\tBH_FDR\tBH_Log2\tNear_gene_ID_up_$up"."_down_$down\tGene_coords\tStrand\n";
 	my $peakfile = $peaksub;
 	my (%hash,%bh_hash, %scores);
 	$peakfile =~s/.*Binary/binary/;
@@ -112,13 +112,25 @@ foreach my $peaksub (@peak_subs)
 		@tmp = ($seq =~/C/g);
 		my $cs = $#tmp + 1;
 		my $c_density = ($cs/$seq_length) * 100;
-		if (exists $nearHash{$elems[0]})
+		my $bt_coords = $elems[0];
+		my ($outChr, $outStart, $outStop);
+		if ($bt_coords =~m/(\w+):(\d+)-(\d+)/)
 		{
-			print OUT "$elems[0]\t$seq_length\t$cgs\t$density\t$cs\t$c_density\t$bh_hash{$elems[0]}\t$nearHash{$elems[0]}\n";
+			$outChr = $1;
+			$outStart = $2 + 1;
+			$outStop = $3;
 		}
 		else
 		{
-			print OUT "$elems[0]\t$seq_length\t$cgs\t$density\t$cs\t$c_density\t$bh_hash{$elems[0]}\t\t\t\n";
+			die "problem with coord regex\n";
+		}
+		if (exists $nearHash{$elems[0]})
+		{
+			print OUT "$outChr\t$outStart\t$outStop\t$seq_length\t$cgs\t$density\t$cs\t$c_density\t$bh_hash{$elems[0]}\t$nearHash{$elems[0]}\n";
+		}
+		else
+		{
+			print OUT "$outChr\t$outStart\t$outStop\t$seq_length\t$cgs\t$density\t$cs\t$c_density\t$bh_hash{$elems[0]}\t\t\t\n";
 		}
 	}
 	close IN;
