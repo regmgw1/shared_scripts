@@ -1,7 +1,6 @@
 #!/bin/bash
 
 FASTQC_HOME=/usr/local/bioinf/FastQC
-REFERENCE=/san1_data/genomic_data/human/GRCh37/human_GRCh37.fa
 
 NAME=`echo $1 |sed 's/\.sam$//'`
 SPECIES=$2
@@ -13,7 +12,7 @@ PATH2SCRIPTS=$6
 # run fastqc on bam file
 $FASTQC_HOME/fastqc $PATH2INPUT/$NAME.sorted.bam
 # convert to BED6
-echo "$PATH2SCRIPTS/sam2bedgff.pl $PATH2INPUT/${NAME}_filter.sam $NAME $SPECIES $READ_LENGTH 0 1 $PATH2OUTPUT/$NAME.bed";
+#echo "$PATH2SCRIPTS/sam2bedgff.pl $PATH2INPUT/${NAME}_filter.sam $NAME $SPECIES $READ_LENGTH 0 1 $PATH2OUTPUT/$NAME.bed";
 $PATH2SCRIPTS/sam2bedgff.pl $PATH2INPUT/${NAME}_filter.sam $NAME $SPECIES $READ_LENGTH 0 1 $PATH2OUTPUT/$NAME.bed 
 # run MEDIPs
 cut -f 1,2,3,6 $PATH2OUTPUT/$NAME.bed >$PATH2OUTPUT/$NAME.medips

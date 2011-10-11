@@ -33,10 +33,10 @@ intersect threshold (e.g. 0.1 for 10% overlap, 0.000000000000001 for single base
 path2scripts = ${10}
 path2output = ${11}" >${11}/annotation.log
 
-echo "perl ${10}/peak_cg_bedtools.pl $2 $WORKING $WORKING/peakDir.list $3 $4 $5 ${11}"
+#echo "perl ${10}/peak_cg_bedtools.pl $2 $WORKING $WORKING/peakDir.list $3 $4 $5 ${11}"
 perl ${10}/peak_cg_bedtools.pl $2 $WORKING $WORKING/peakDir.list $3 $4 $5 ${11}
 
-echo "perl ${10}/peak_explorer_bedtools.pl ../sample.list ../ $WORKING $WORKING/peakDir.list ${11}"
+#echo "perl ${10}/peak_explorer_bedtools.pl ../sample.list ../ $WORKING $WORKING/peakDir.list ${11}"
 perl ${10}/peak_explorer_bedtools.pl ../sample.list ../ $WORKING $WORKING/peakDir.list ${11}
 
 echo "perl ${10}/peaks_in_features_bedtools_wrap.pl $WORKING $WORKING/peakDir.list $7 $8 $6 $9 $GFF_OR_BED ${11}"

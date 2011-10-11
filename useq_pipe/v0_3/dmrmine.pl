@@ -157,8 +157,16 @@ my $cnv_dir = $cnv->{cnv_dir};
 # process the sample ids
 my @treats = split/,/,$treats;
 my @controls = split/,/,$controls;
-my @samples = (@treats,@controls);
-
+# if just want to perform alignment and filtering can set controls as 0
+my @samples;
+if ($controls eq "0")
+{
+	@samples = @treats;
+}
+else
+{
+	@samples = (@treats,@controls);
+}
 # print copy of config file, plus sample info to path2alignment to keep as record
 my $time = time();
 my $tmp_cfg = "dmrmine_config_".$time.".txt";

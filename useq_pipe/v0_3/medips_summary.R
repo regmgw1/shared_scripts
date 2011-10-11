@@ -17,8 +17,14 @@ if (species == "Mouse"){
 } else if (species == "Dog"){
 	library(BSgenome.Cfamiliaris.UCSC.canFam2)
 	genome <- "BSgenome.Cfamiliaris.UCSC.canFam2"
+} else if (species == "Chimp"){
+	library(BSgenome.Ptroglodytes.UCSC.panTro2)
+	genome<-"BSgenome.Ptroglodytes.UCSC.panTro2"
+} else if (species == "Macaca"){
+	library(BSgenome.Mmulatta.NCBI.mmul1)
+	genome<-"BSgenome.Mmulatta.NCBI.mmul1"
 } else {
-        stop("Species must be Mouse, Human or Dog. Currently using mouse mm9, human hg19 and dog canFam2")
+        stop("Species must be Mouse, Human, Chimp, Macaca or Dog. Currently using mouse mm9, human hg19, chimp panTro2, macaca mmul1 and dog canFam2")
 }
 source(paste(path2scripts,"/medips_strand_function.R",sep=""))
 setwd(path2output)

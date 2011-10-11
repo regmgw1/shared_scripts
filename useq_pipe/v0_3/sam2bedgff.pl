@@ -35,6 +35,14 @@ elsif ($species eq "Dog")
 {
 	@chroms = (1..38,'X',);
 }
+elsif ($species eq "Chimp")
+{
+	@chroms = (1,'2a','2b',3..22,'X','Y');
+}
+elsif ($species eq "Macaca")
+{
+	@chroms = (1..20,'X')
+}
 elsif ($species eq "single")
 {
 	@chroms = (1);
@@ -179,7 +187,7 @@ foreach my $chr (@chroms)
 				my $string;
 				if ($bed == 1)
 				{
-					$string = "$chrom\t$pos\t$end\t$read_id\t$qual\t$strand\n";
+					$string = "chr$chrom\t$pos\t$end\t$read_id\t$qual\t$strand\n";
 				}
 				else
 				{
