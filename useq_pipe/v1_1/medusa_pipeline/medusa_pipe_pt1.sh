@@ -25,7 +25,7 @@ $PATH2SCRIPTS/R_scripts/medips_summary.R $NAME $SPECIES $PATH2SCRIPTS $PATH2OUTP
 # check to see if rpm.wig file has content. if so delete filter.sam and .medips files
 FILE=$PATH2OUTPUT/${NAME}_rpm.wig
 if [[ -s $FILE ]] ; then
-#wigToBigWig $PATH2OUTPUT/${NAME}_rpm.wig chrom.sizes $PATH2OUTPUT/${NAME}_rpm.bw
+wigToBigWig $PATH2OUTPUT/${NAME}_rpm.wig chrom.sizes $PATH2OUTPUT/${NAME}_rpm.bw
 gzip $PATH2OUTPUT/${NAME}_rpm.wig
 gzip $PATH2OUTPUT/${NAME}_for_rpm.wig
 gzip $PATH2OUTPUT/${NAME}_rev_rpm.wig
