@@ -138,7 +138,7 @@ my $bwa_genome = $genomes->{bwa_genome};
 my $fasta_genome = $genomes->{fasta_genome};
 my $species = $genomes->{species};
 my $ref_name = $genomes->{ref_name};
-my $max_chrom = $genomes->{max_chrom};
+my $chrom_list = $genomes->{chrom_list};
 
 my $reads = $cfg->param(-block=>'READS');
 my $max_insert = $reads->{max_insert};
@@ -232,7 +232,7 @@ if ($part1)
 		# This code is the child process
 		print "started further filtering and QC process for  $sample\n";
 	        my $logout = "$path2useq/$sample"."_pipe_pt1.log";
-	        exec("$path2scripts/medusa_pipeline/medusa_pipe_pt1.sh $sample $species $read_length $path2alignment $path2useq $path2scripts >$logout") or die "couldn't exec part 1 $sample";
+	        exec("$path2scripts/medusa_pipeline/medusa_pipe_pt1.sh $sample $species $read_length $chrom_list $path2alignment $path2useq $path2scripts >$logout") or die "couldn't exec part 1 $sample";
 	        print "done with filtering and QC process for $sample\n";
 		sleep 1;
 		$pm->finish($child); # pass an exit code to finish
