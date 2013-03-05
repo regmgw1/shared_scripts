@@ -52,6 +52,10 @@ else
 		chomp $line;
 		my @elems = split/\t/, $line;
 		my $chrCol = $elems[0];
+		if ($chrCol !~m/^chr/)
+		{
+			$chrCol = "chr".$chrCol;
+		}
 		#$chrCol =~s/chr//;
 		push @chroms, $chrCol;
 		my $fh = new IO::File(">$path2output"."_$chrCol".".sam") or die "Can't open $path2output"."_$chrCol".".sam";
