@@ -85,6 +85,10 @@ if ($species ne "single")
 	{
 		my @elems = split/\t/,$line;
 		my $chrom = $elems[2];
+		if ($chrom !~m/^chr/)
+		{
+			$chrom = "chr".$chrom;
+		}
 		#$chrom =~s/^chr//;
 		my $fh = $typeH{$chrom};
 		print $fh "$line";
