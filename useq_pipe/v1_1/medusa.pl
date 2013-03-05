@@ -232,7 +232,7 @@ if ($part1)
 		# This code is the child process
 		print "started further filtering and QC process for  $sample\n";
 	        my $logout = "$path2useq/$sample"."_pipe_pt1.log";
-	        exec("$path2scripts/medusa_pipeline/medusa_pipe_pt1.sh $sample $species $read_length $chrom_list $path2alignment $path2useq $path2scripts >$logout") or die "couldn't exec part 1 $sample";
+	        exec("$path2scripts/medusa_pipeline/medusa_pipe_pt1.sh $sample $species $read_length $chrom_list $path2alignment $path2genome_dir $path2useq $path2scripts >$logout") or die "couldn't exec part 1 $sample";
 	        print "done with filtering and QC process for $sample\n";
 		sleep 1;
 		$pm->finish($child); # pass an exit code to finish
