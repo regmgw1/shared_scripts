@@ -161,11 +161,11 @@ foreach my $chr (@chroms)
 				my $string;
 				if ($bed == 1)
 				{
-					$string = "$chrom\t$posh{$read_id}\t$end\t$read_id\t$qual_h{$read_id}$qual\t$strand\n";
+					$string = "chr$chrom\t$posh{$read_id}\t$end\t$read_id\t$qual_h{$read_id}$qual\t$strand\n";
 				}
 				else
 				{
-					$string = "$chrom\tSAM2pippy\tpaired\t$posh{$read_id}\t$end\t$qual_h{$read_id}$qual\t$strand\t0\t$read_id\n";
+					$string = "chr$chrom\tSAM2pippy\tpaired\t$posh{$read_id}\t$end\t$qual_h{$read_id}$qual\t$strand\t0\t$read_id\n";
 				}
 				my $coords = "$chrom"."_$posh{$read_id}"."_$end";
 				$count_reads++;
@@ -204,11 +204,11 @@ foreach my $chr (@chroms)
 				my $string;
 				if ($bed == 1)
 				{
-					$string = "$chrom\t$pos\t$end\t$read_id\t$qual\t$strand\n";
+					$string = "chr$chrom\t$pos\t$end\t$read_id\t$qual\t$strand\n";
 				}
 				else
 				{
-					$string = "$chrom\tSAM2pippy\tse\t$pos\t$end\t$qual\t$strand\t0\t$read_id\n";
+					$string = "chr$chrom\tSAM2pippy\tse\t$pos\t$end\t$qual\t$strand\t0\t$read_id\n";
 				}
 				my $coords = "$chrom"."_$pos"."_$end";
 				$count_reads++;
