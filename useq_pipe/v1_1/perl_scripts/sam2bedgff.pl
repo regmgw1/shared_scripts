@@ -255,14 +255,19 @@ foreach my $chr (@chroms)
 }
 my $aligned = $count_lines/2;
 my $final_reads = $total_read-$total_rep;
-
-print "\n";
-print "Aligned = $aligned\n";
-print "Failed QC (q<10) = $failed_qc\n";
-print "High Quality aligned reads = $total_read\n";
-print "Total repeated = $total_rep\n";
-print "Final Reads (nonclonal) = $final_reads\n";
 close OUT;
+
+my $mean_fragment = frag_length($path2output);
+open (SUM ,">$path2output"."_summaryCounts.txt") or die "Can't open $path2output"."_summaryCounts.txt for writing";
+print SUM "\n";
+print SUM "Aligned\t$aligned\n";
+print SUM "Failed QC (q<10)\t$failed_qc\n";
+print SUM "High Quality aligned reads\t$total_read\n";
+print SUM "Total repeated\t$total_rep\n";
+print SUM "Final Reads (nonclonal)\t$final_reads\n";
+print SUM "Mean Fragment length\t$mean_fragment\n";
+close SUM;
+
 
 foreach my $chr (@chroms)
 {
@@ -272,3 +277,30 @@ foreach my $chr (@chroms)
 	unlink $chrTemp or die "Can't delete $chrTemp";
 	#$chrTemp =~ s/\_$chr.sam//;
 }
+
+sub frag_length
+{
+	my $path2file = shift;	my @fragSizeDistr;
+	$fragSizeDistr[0]={}; # initialize frag size distribution hash for ith file
+	my $hashRef=$fragSizeDistr[0];
+	open FILE, "$path2file"; 
+	my $n=0;
+	my $mean_fragment = 0;
+	while(<FILE>)
+	{
+		chop; $n++;
+		my ($chr, $start, $end, @rest) = split /\t/;
+		$$hashRef{$end-$start} += 1; # update frag size distribution
+	}
+	close FILE;
+	foreach my $insSize (keys %$hashRef) {
+		$$hashRef{$insSize} /= $n;
+	}
+	my %fragSize = %$hashRef;
+	foreach my $insSize (sort numerically keys %fragSize)
+	{
+		$mean_fragment += $insSize * ${fragSize{$insSize}};
+	}
+	return $mean_fragment;
+}	
+sub numerically {$a<=>$b};

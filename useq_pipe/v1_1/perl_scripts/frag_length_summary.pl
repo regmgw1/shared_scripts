@@ -50,5 +50,5 @@ foreach my $insSize (sort numerically keys %fragSize)
 	$mean_fragment += $insSize * ${fragSize{$insSize}};
 }
 close OUT;
-print "Mean Fragment Length = $mean_fragment\n";
+print "Mean Fragment Length $path2file = $mean_fragment\n";
 sub numerically {$a<=>$b};
