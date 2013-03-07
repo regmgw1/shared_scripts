@@ -31,6 +31,7 @@ $fragSizeDistr[0]={}; # initialize frag size distribution hash for ith file
 my $hashRef=$fragSizeDistr[0];
 open FILE, "$path2file"; 
 my $n=0;
+my $mean_fragment = 0;
 while(<FILE>)
 {
 	chop; $n++;
@@ -46,7 +47,8 @@ my %fragSize = %$hashRef;
 foreach my $insSize (sort numerically keys %fragSize)
 {
 	print OUT "$insSize\t${fragSize{$insSize}}\n";
+	$mean_fragment += $insSize * ${fragSize{$insSize}};
 }
 close OUT;
-
+print "Mean Fragment Length = $mean_fragment\n";
 sub numerically {$a<=>$b};
