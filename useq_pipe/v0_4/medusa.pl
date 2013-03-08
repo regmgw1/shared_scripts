@@ -172,6 +172,13 @@ else
 	@samples = (@treats,@controls);
 }
 # print copy of config file, plus sample info to path2alignment to keep as record
+
+#check to see if $path2alignment exists, if not make directory
+unless(-d $path2alignment)
+{
+	mkdir $path2alignment or die;
+}
+
 my $time = time();
 my $tmp_cfg = "medusa_config_".$time.".txt";
 open (OUT, ">$path2alignment/$tmp_cfg") or die "Can't open $path2alignment/$tmp_cfg for writing";
