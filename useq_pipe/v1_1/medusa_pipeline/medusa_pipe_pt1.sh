@@ -20,7 +20,7 @@ fastqc $PATH2INPUT/$NAME.sorted.bam
 echo "$PATH2SCRIPTS/perl_scripts/sam2bedgff.pl $PATH2INPUT/${NAME}_filter.sam $NAME $SPECIES $READ_LENGTH $CHROM_LIST 0 1 $PATH2OUTPUT/$NAME.bed";
 $PATH2SCRIPTS/perl_scripts/sam2bedgff.pl $PATH2INPUT/${NAME}_filter.sam $NAME $SPECIES $READ_LENGTH $PATH2GENOME/$CHROM_LIST 0 1 $PATH2OUTPUT/$NAME.bed 
 # generate input file for MEDIPS
-grep -v '^GL\|^M' $PATH2OUTPUT/$NAME.bed|cut -f 1,2,3,6 >$PATH2OUTPUT/$NAME.medips
+grep -v '^GL\|^M\|^chrGL\|^chrM' $PATH2OUTPUT/$NAME.bed|cut -f 1,2,3,6 >$PATH2OUTPUT/$NAME.medips
 #run the script in R using Rscript
 $PATH2SCRIPTS/R_scripts/medips_summary.R $NAME $SPECIES $PATH2SCRIPTS $PATH2OUTPUT 
 
