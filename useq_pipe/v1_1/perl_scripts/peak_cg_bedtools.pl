@@ -136,6 +136,7 @@ foreach my $peaksub (@peak_subs)
 		}
 		else
 		{
+			print "elems = $elems[0]\n";			
 			print OUT "$outChr\t$outStart\t$outStop\t$seq_length\t$cgs\t$density\t$cs\t$c_density\t$gs\t$g_density\t$bh_hash{$elems[0]}\t\t\t\n";
 		}
 	}
@@ -160,7 +161,8 @@ sub nearest_gene
 	open (DMR, $path2peaks ) or die "Can't open $path2peaks for reading";
 	while (my $dmr = <DMR>)
 	{
-		print GFF "$dmr";
+		$dmr =~s/^chr//;		
+		print GFF "$dmr";		
 	}
 	close GFF;
 	my @intersect = `intersectBed -a $path2genes -b $path2output/tmpNear.gff -wa -wb`;
@@ -232,10 +234,11 @@ sub nearest_gene
 	{
 		my @elems = split/\t/,$hash{$out};
 		my $mod_start = $elems[12] - 1;
-		my $coords = "$elems[0]".":$mod_start"."-$elems[13]";
+		my $coords = "chr$elems[0]".":$mod_start"."-$elems[13]";
 		my @waste = split/_/,$elems[1];
 		my $id = $waste[$#waste];
 		$nearHash{$coords} = "$id\t$elems[2]\t$elems[6]";
+		print "$coords\t$nearHash{$coords}\n";
 	}
 	return \%nearHash;
 }	
