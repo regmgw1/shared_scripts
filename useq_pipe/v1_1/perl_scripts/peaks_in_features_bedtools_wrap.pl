@@ -21,8 +21,8 @@ Usage: ./peaks_in_features_bedtools_wrap.pl path2peakroot path2peaklist path2fea
 
 use strict;
 
-unless (@ARGV ==9) {
-        die "\n\nUsage:\n ./peaks_in_features_bedtools_wrap.pl path2peakroot path2peaklist path2featureList path2repeatlist path2features intersect_thresh gff(0)_or_bed(1) path2output\nPlease try again.\n\n\n";}
+unless (@ARGV ==11) {
+        die "\n\nUsage:\n ./peaks_in_features_bedtools_wrap.pl path2peakroot path2peaklist path2featureList path2repeatlist path2features intersect_thresh gff(0)_or_bed(1) path2scripts path2output path2celllist species\nPlease try again.\n\n\n";}
 
 #for pipeline use
 my $path2peakroot = shift;
