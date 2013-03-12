@@ -26,7 +26,6 @@ elif [ "$7" == "1" ]; then
 java -Xmx10G -jar $USEQ_HOME/MultipleReplicaScanSeqs -t $1 -c $2 -s $3 -p 0 -w 500 -r /usr/local/bin/R -m $5 -f $6 -b
 fi
 
-java -Xmx10G -jar $USEQ_HOME/MultipleReplicaScanSeqs -t $1 -c $2 -s $3 -p 0 -w 500 -r /usr/local/bin/R -m $5 -f $6
 # call DMRs (not using sub-window option of EnrichedRegionMaker: not relevant for MeDIP-seq)
 # hypermethylation
 # 20% FDR
