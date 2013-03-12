@@ -29,22 +29,22 @@ fi
 # call DMRs (not using sub-window option of EnrichedRegionMaker: not relevant for MeDIP-seq)
 # hypermethylation
 # 20% FDR
-java -Xmx6G -jar $USEQ_HOME/EnrichedRegionMaker -f $3/* -s 7,0.001 -i 0,1
+java -Xmx6G -jar $USEQ_HOME/EnrichedRegionMaker -f $3/binaryWindowData.swi.zip -s 7,0.001 -i 0,1
 # 10% FDR
-java -Xmx6G -jar $USEQ_HOME/EnrichedRegionMaker -f $3/* -s 10,0.001 -i 0,1
+java -Xmx6G -jar $USEQ_HOME/EnrichedRegionMaker -f $3/binaryWindowData.swi.zip -s 10,0.001 -i 0,1
 # 5% FDR
-java -Xmx6G -jar $USEQ_HOME/EnrichedRegionMaker -f $3/* -s 13,0.001 -i 0,1
+java -Xmx6G -jar $USEQ_HOME/EnrichedRegionMaker -f $3/binaryWindowData.swi.zip -s 13,0.001 -i 0,1
 # 1% FDR
-java -Xmx6G -jar $USEQ_HOME/EnrichedRegionMaker -f $3/* -s 20,0.001 -i 0,1
+java -Xmx6G -jar $USEQ_HOME/EnrichedRegionMaker -f $3/binaryWindowData.swi.zip -s 20,0.001 -i 0,1
 # hypomethylation
 # 20% FDR
-java -Xmx6G -jar $USEQ_HOME/EnrichedRegionMaker -f $3/* -s 7,0.001 -i 0,1 -m
+java -Xmx6G -jar $USEQ_HOME/EnrichedRegionMaker -f $3/binaryWindowData.swi.zip -s 7,0.001 -i 0,1 -m
 # 10% FDR
-java -Xmx6G -jar $USEQ_HOME/EnrichedRegionMaker -f $3/* -s 10,0.001 -i 0,1 -m
+java -Xmx6G -jar $USEQ_HOME/EnrichedRegionMaker -f $3/binaryWindowData.swi.zip -s 10,0.001 -i 0,1 -m
 # 5% FDR
-java -Xmx6G -jar $USEQ_HOME/EnrichedRegionMaker -f $3/* -s 13,0.001 -i 0,1 -m
+java -Xmx6G -jar $USEQ_HOME/EnrichedRegionMaker -f $3/binaryWindowData.swi.zip -s 13,0.001 -i 0,1 -m
 # 1% FDR
-java -Xmx6G -jar $USEQ_HOME/EnrichedRegionMaker -f $3/* -s 20,0.001 -i 0,1 -m
+java -Xmx6G -jar $USEQ_HOME/EnrichedRegionMaker -f $3/binaryWindowData.swi.zip -s 20,0.001 -i 0,1 -m
 
 echo "hypERmethylated DMRs output directories:"
 for fdr in 7 10 13 20; do ls -d $3/Enr*FDR$fdr.0_Log*/;done
