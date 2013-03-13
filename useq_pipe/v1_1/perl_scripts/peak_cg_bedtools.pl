@@ -21,18 +21,32 @@ Usage: ./peaks_cg_bedtools.pl path2genome path2peakroot path2peaklist path2outpu
 
 use strict;
 
-unless (@ARGV ==7) {
-        die "\n\nUsage:\n ./peaks_cg_bedtools.pl path2genome path2peakroot path2peaklist path2genes upstream_threshold downstream_threshold path2output\nPlease try again.\n\n\n";}
+unless (@ARGV ==8) {
+        die "\n\nUsage:\n ./peaks_cg_bedtools.pl path2genome path2peakroot path2peaklist path2genes path2chromlist upstream_threshold downstream_threshold path2output\nPlease try again.\n\n\n";}
 
 my $path2genome = shift;
 my $path2peakroot = shift;
 my $path2peaklist = shift;
 my $path2genes = shift;
+my $path2chrom = shift;
 my $up = shift;
 my $down = shift;
 my $path2output = shift;
 
 my (@samples, @peak_subs);
+
+#open chrom list, determine nomenclature for sequence retrieval
+my $chrom_nom = "";
+open (CHR, "$path2chrom" ) or die "Can't open $path2chrom for reading";
+while (my $line = <CHR>)
+{
+	chomp $line;	
+	if ($line =~m/^chr/)
+	{
+		$chrom_nom = "chr";
+	}	
+}
+close CHR;
 
 # open list of directory names containing peaks and store in array
 open (IN, "$path2peaklist" ) or die "Can't open $path2peaklist for reading";
@@ -65,12 +79,12 @@ foreach my $peaksub (@peak_subs)
 			my @elems = split/\t/, $line;
 			my $tmpC = $elems[1];
 			$tmpC =~s/^chr//;
-			print TMP "chr$tmpC\ttmpGFF\tmoreTemp\t$elems[2]\t$elems[3]\t$elems[4]\t.\t.\tnoMore\n";
-			print BHTMP "chr$tmpC\ttmpGFF\tmoreTemp\t$elems[5]\t$elems[6]\t$elems[7]\t$elems[8]\t.\tnoMore\n";
+			print TMP "$chrom_nom$tmpC\ttmpGFF\tmoreTemp\t$elems[2]\t$elems[3]\t$elems[4]\t.\t.\tnoMore\n";
+			print BHTMP "$chrom_nom$tmpC\ttmpGFF\tmoreTemp\t$elems[5]\t$elems[6]\t$elems[7]\t$elems[8]\t.\tnoMore\n";
 			my $start = $elems[2] - 1;
 			my $startBH = $elems[5] - 1;
-			my $coords = "chr$tmpC".":$start"."-$elems[3]";
-			my $coordsBH = "chr$tmpC".":$startBH"."-$elems[6]";
+			my $coords = "$chrom_nom$tmpC".":$start"."-$elems[3]";
+			my $coordsBH = "$chrom_nom$tmpC".":$startBH"."-$elems[6]";
 			$hash{$coordsBH} = $coords;
 			$scores{$coordsBH} = "$elems[7]\t$elems[8]";
 		}
@@ -238,7 +252,6 @@ sub nearest_gene
 		my @waste = split/_/,$elems[1];
 		my $id = $waste[$#waste];
 		$nearHash{$coords} = "$id\t$elems[2]\t$elems[6]";
-		print "$coords\t$nearHash{$coords}\n";
 	}
 	return \%nearHash;
 }	

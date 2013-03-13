@@ -80,7 +80,7 @@ while (my $line = <IN>)
 	close DMR;
 	close TMP;
 	open (TMP, ">$path2output"."_tmp$time.rep") or die "Can't open $path2output"."_tmp$time.rep for writing";
-	open (REP, "$path2feature/repeat_family/repeat_family.gff" ) or die "Can't open $path2feature/repeat_family/repeat_family.gff for reading";
+	open (REP, "$path2feature/repeats/repeats.gff" ) or die "Can't open $path2feature/repeats/repeats.gff for reading";
 	while (my $reps = <REP>)
 	{
 		chomp $reps;

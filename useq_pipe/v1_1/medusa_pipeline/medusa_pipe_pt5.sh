@@ -39,12 +39,13 @@ path2scripts = ${10}
 path2output = ${11}
 path2filtered = ${12}
 path2celllist = ${13}
-species = ${14}" >${11}/annotation.log
+species = ${14}
+path2chromlist = ${15}" >${11}/annotation.log
 
 echo "perl ${10}/peak_cg_bedtools.pl $2 $WORKING $WORKING/peakDir.list $3 $4 $5 ${11}"
-perl ${10}/peak_cg_bedtools.pl $2 $WORKING $WORKING/peakDir.list $3 $4 $5 ${11}
+perl ${10}/peak_cg_bedtools.pl $2 $WORKING $WORKING/peakDir.list $3 ${15} $4 $5 ${11}
 
-$PATH2SCRIPTS/R_scripts/medusaVolcano.R ${11}
+${10}/R_scripts/medusaVolcano.R ${11}
 
 echo "perl ${10}/peak_explorer_bedtools.pl $WORKING/sample.list ../ $WORKING $WORKING/peakDir.list ${11}"
 perl ${10}/peak_explorer_bedtools.pl $WORKING/sample.list ${12} $WORKING $WORKING/peakDir.list ${11}

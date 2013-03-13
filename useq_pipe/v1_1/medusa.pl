@@ -339,6 +339,6 @@ if ($part5)
 	}
 	close OUT;
 	print "Starting DMR annotation\n";
-	system("$path2scripts/medusa_pipeline/medusa_pipe_pt5.sh $path2dmr $path2genome_dir/$fasta_genome $path2features_dir/genes/genes.gff $upstream $downstream $path2features_dir $path2features_list $path2repeats_list $intersect_threshold $path2scripts/perl_scripts $path2annotation_output $path2useq $path2cells_list $species");
+	system("$path2scripts/medusa_pipeline/medusa_pipe_pt5.sh $path2dmr $path2genome_dir/$fasta_genome $path2features_dir/genes/genes.gff $upstream $downstream $path2features_dir $path2features_list $path2repeats_list $intersect_threshold $path2scripts/perl_scripts $path2annotation_output $path2useq $path2cells_list $species $chrom_list");
 	print "End of pipe part 5\n";
 }
