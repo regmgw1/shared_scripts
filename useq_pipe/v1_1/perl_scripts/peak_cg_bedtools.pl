@@ -133,8 +133,9 @@ foreach my $peaksub (@peak_subs)
 		my $gs = $#tmp + 1;
 		my $g_density = ($gs/$seq_length) * 100;
 		my $bt_coords = $elems[0];
+		print "bt coords = $bt_coords\n";
 		my ($outChr, $outStart, $outStop);
-		if ($bt_coords =~m/(\w+):(\d+)-(\d+)/)
+		if ($bt_coords =~m/(\S+):(\d+)-(\d+)/)
 		{
 			$outChr = $1;
 			$outStart = $2 + 1;

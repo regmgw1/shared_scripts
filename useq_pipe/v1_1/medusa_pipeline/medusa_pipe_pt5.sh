@@ -42,14 +42,14 @@ path2celllist = ${13}
 species = ${14}
 path2chromlist = ${15}" >${11}/annotation.log
 
-echo "perl ${10}/peak_cg_bedtools.pl $2 $WORKING $WORKING/peakDir.list $3 $4 $5 ${11}"
-perl ${10}/peak_cg_bedtools.pl $2 $WORKING $WORKING/peakDir.list $3 ${15} $4 $5 ${11}
+echo "perl ${10}/perl_scripts/peak_cg_bedtools.pl $2 $WORKING $WORKING/peakDir.list $3 $4 $5 ${11}"
+perl ${10}/perl_scripts/peak_cg_bedtools.pl $2 $WORKING $WORKING/peakDir.list $3 ${15} $4 $5 ${11}
 
 ${10}/R_scripts/medusaVolcano.R ${11}
 
-echo "perl ${10}/peak_explorer_bedtools.pl $WORKING/sample.list ../ $WORKING $WORKING/peakDir.list ${11}"
-perl ${10}/peak_explorer_bedtools.pl $WORKING/sample.list ${12} $WORKING $WORKING/peakDir.list ${11}
+echo "perl ${10}/perl_scripts/peak_explorer_bedtools.pl $WORKING/sample.list ../ $WORKING $WORKING/peakDir.list ${11}"
+perl ${10}/perl_scripts/peak_explorer_bedtools.pl $WORKING/sample.list ${12} $WORKING $WORKING/peakDir.list ${11}
 
-echo "perl ${10}/peaks_in_features_bedtools_wrap.pl $WORKING $WORKING/peakDir.list $7 $8 $6 $9 $GFF_OR_BED ${10} ${11} ${13} ${14}"
-perl ${10}/peaks_in_features_bedtools_wrap.pl $WORKING $WORKING/peakDir.list $7 $8 $6 $9 $GFF_OR_BED ${10} ${11} ${13} ${14}
+echo "perl ${10}/perl_scripts/peaks_in_features_bedtools_wrap.pl $WORKING $WORKING/peakDir.list $7 $8 $6 $9 $GFF_OR_BED ${10} ${11} ${13} ${14}"
+perl ${10}/perl_scripts/peaks_in_features_bedtools_wrap.pl $WORKING $WORKING/peakDir.list $7 $8 $6 $9 $GFF_OR_BED ${10} ${11} ${13} ${14}
 cd $CURRENT
