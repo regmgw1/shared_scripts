@@ -133,7 +133,6 @@ foreach my $peaksub (@peak_subs)
 		my $gs = $#tmp + 1;
 		my $g_density = ($gs/$seq_length) * 100;
 		my $bt_coords = $elems[0];
-		print "bt coords = $bt_coords\n";
 		my ($outChr, $outStart, $outStop);
 		if ($bt_coords =~m/(\S+):(\d+)-(\d+)/)
 		{
@@ -151,7 +150,6 @@ foreach my $peaksub (@peak_subs)
 		}
 		else
 		{
-			print "elems = $elems[0]\n";			
 			print OUT "$outChr\t$outStart\t$outStop\t$seq_length\t$cgs\t$density\t$cs\t$c_density\t$gs\t$g_density\t$bh_hash{$elems[0]}\t\t\t\n";
 		}
 	}
