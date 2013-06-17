@@ -2,33 +2,34 @@
 
 # script runs the various QC steps for the medusa pipeline - utilises the MEDIPS bioconductor package.
 args <- commandArgs();
-sample<-args[length(args)-4]
-species<-args[length(args)-3]
+sample<-args[length(args)-5]
+species<-args[length(args)-4]
+refName<-args[length(args)-3]
 windowSize<-as.numeric(args[length(args)-2])
 strands<-as.numeric(args[length(args)-1])
 path2output<-args[length(args)]
 
-#sample<-"HN105"
-#species<-"Human"
-#windowSize<-100
-#path2output<-"/medical_genomics/tmpFiles/medipsTest_160513/"
-
 library(MEDIPS)
 if (species == "Mouse"){
-	library(BSgenome.Mmusculus.UCSC.mm9)
-	genome <- "BSgenome.Mmusculus.UCSC.mm9"
+	bsGenome<-paste("BSgenome.Mmusculus.UCSC.",refName,sep="")
+	library(bsGenome,character.only=T)
+	genome <- bsGenome
 } else if (species == "Human"){
-	library(BSgenome.Hsapiens.UCSC.hg19)
-	genome <- "BSgenome.Hsapiens.UCSC.hg19"
+	bsGenome<-paste("BSgenome.Hsapiens.UCSC.",refName,sep="")
+	library(bsGenome,character.only=T)
+	genome <- bsGenome
 } else if (species == "Dog"){
-	library(BSgenome.Cfamiliaris.UCSC.canFam2)
-	genome <- "BSgenome.Cfamiliaris.UCSC.canFam2"
+	bsGenome<-paste("BSgenome.Cfamiliaris.UCSC.",refName,sep="")
+	library(bsGenome,character.only=T)
+	genome <- bsGenome
 } else if (species == "Chimp"){
-	library(BSgenome.Ptroglodytes.UCSC.panTro2)
-	genome<-"BSgenome.Ptroglodytes.UCSC.panTro2"
+	bsGenome<-paste("BSgenome.Ptroglodytes.UCSC.",refName,sep="")
+	library(bsGenome,character.only=T)
+	genome <- bsGenome
 } else if (species == "Macaca"){
-	library(BSgenome.Mmulatta.NCBI.mmul1)
-	genome<-"BSgenome.Mmulatta.NCBI.mmul1"
+	bsGenome<-paste("BSgenome.Mmulatta.NCBI.",refName,sep="")
+	library(bsGenome,character.only=T)
+	genome <- bsGenome
 } else {
         stop("Species must be Mouse, Human, Chimp, Macaca or Dog. Currently using mouse mm9, human hg19, chimp panTro2, macaca mmul1 and dog canFam2")
 }

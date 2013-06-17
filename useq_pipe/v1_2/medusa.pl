@@ -226,7 +226,7 @@ if ($part2)
 		# This code is the child process
 		print "started MEDIPS QC process for  $sample\n";
 	        my $logout = "$path2filtered/$sample"."_pipe_pt2.log";
-	        exec("$path2scripts/medusa_pipeline/medusa_pipe_pt2.sh $sample $species $window_size $path2alignment $path2genome_dir/$chrom_list $path2filtered $path2scripts >$logout") or die "couldn't exec part 2 $sample";
+	        exec("$path2scripts/medusa_pipeline/medusa_pipe_pt2.sh $sample $species $ref_name $window_size $path2alignment $path2genome_dir/$chrom_list $path2filtered $path2scripts >$logout") or die "couldn't exec part 2 $sample";
 	        print "done with MEDIPS QC process for $sample\n";
 		sleep 1;
 		$pm->finish($child); # pass an exit code to finish
@@ -242,7 +242,7 @@ if ($part3)
 	}
 	print "Starting DMR calling\n";
 	my $logout = "$path2filtered/medusa_pipe_pt3.log";
-	system("$path2scripts/medusa_pipeline/medusa_pipe_pt3.sh $treats $controls $species $min_read_depth $dmr_size $dmr_pvalue $path2filtered $path2dmr $path2scripts >$logout");
+	system("$path2scripts/medusa_pipeline/medusa_pipe_pt3.sh $treats $controls $species $ref_name $min_read_depth $dmr_size $dmr_pvalue $path2filtered $path2dmr $path2scripts >$logout");
 	print "End of pipe part 3\n";
 }
 
