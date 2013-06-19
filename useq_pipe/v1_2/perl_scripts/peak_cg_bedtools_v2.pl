@@ -79,7 +79,7 @@ foreach my $dmr_file (@dmr_files)
 			my $start = $elems[1] - 1;
 			my $coords = "$chrom_nom$tmpC".":$start"."-$elems[2]";
 			$hash{$coords} = $coords;
-			$scores{$coords} = "$elems[31]\t$elems[28]";
+			$scores{$coords} = "$elems[$#elems]\t$elems[$#elems-3]";
 		}
 		$l_count++;
 	}

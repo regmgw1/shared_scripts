@@ -70,14 +70,22 @@ mr.edgeR<-MEDIPS.meth(MSet1=treat.set,MSet2=control.set,CSet=CS,p.adj="bonferron
 mr.edgeR.s<-MEDIPS.selectSig(results=mr.edgeR,p.value=pvalue,adj=T,ratio=NULL,bg.counts=NULL,CNV=F)
 mr.edgeR.s.treatLoss<-mr.edgeR.s[which(mr.edgeR.s[,grep("logFC",colnames(mr.edgeR.s))] <0),]
 mr.edgeR.s.treatGain<-mr.edgeR.s[which(mr.edgeR.s[,grep("logFC",colnames(mr.edgeR.s))] >0),]
-mr.edgeR.s.treatLoss.m<-MEDIPS.mergeFrames(frames=mr.edgeR.s.treatLoss,distance=0)
-mr.edgeR.s.treatGain.m<-MEDIPS.mergeFrames(frames=mr.edgeR.s.treatGain,distance=0)
-write.table(mr.edgeR.s.treatGain,file=paste("medips_dmrs_hyperTreatment_p",pvalue,".txt",sep=""),append=F,quote=F,sep="\t",row.names=F,col.names=T)
+
+dmrFiles<-character()
+if (dim(mr.edgeR.s.treatLoss)[1] > 0) {
 write.table(mr.edgeR.s.treatLoss,file=paste("medips_dmrs_hypoTreatment_p",pvalue,".txt",sep=""),append=F,quote=F,sep="\t",row.names=F,col.names=T)
-dmrFiles<-c(paste("medips_dmrs_hyperTreatment_p",pvalue,".txt",sep=""),paste("medips_dmrs_hypoTreatment_p",pvalue,".txt",sep=""))
-write.table(dmrFiles,file="dmrFiles.txt",,append=F,quote=F,sep="\t",row.names=F,col.names=F)
-mr.edgeR.s.treatGain.m<-data.frame(mr.edgeR.s.treatGain.m$chr,as.numeric(mr.edgeR.s.treatGain.m$start),as.numeric(mr.edgeR.s.treatGain.m$stop),mr.edgeR.s.treatGain.m$ID)
+mr.edgeR.s.treatLoss.m<-MEDIPS.mergeFrames(frames=mr.edgeR.s.treatLoss,distance=0)
 mr.edgeR.s.treatLoss.m<-data.frame(mr.edgeR.s.treatLoss.m$chr,as.numeric(mr.edgeR.s.treatLoss.m$start),as.numeric(mr.edgeR.s.treatLoss.m$stop),mr.edgeR.s.treatLoss.m$ID)
 write.table(mr.edgeR.s.treatLoss.m,file=paste("medips_dmrs_hypoTreatment_p",pvalue,".bed",sep=""),append=F,quote=F,sep="\t",row.names=F,col.names=F)
+dmrFiles<-c(dmrFiles,paste("medips_dmrs_hypoTreatment_p",pvalue,".txt",sep=""))
+}
+
+if (dim(mr.edgeR.s.treatGain)[1] > 0) {
+write.table(mr.edgeR.s.treatGain,file=paste("medips_dmrs_hyperTreatment_p",pvalue,".txt",sep=""),append=F,quote=F,sep="\t",row.names=F,col.names=T)
+mr.edgeR.s.treatGain.m<-MEDIPS.mergeFrames(frames=mr.edgeR.s.treatGain,distance=0)
+mr.edgeR.s.treatGain.m<-data.frame(mr.edgeR.s.treatGain.m$chr,as.numeric(mr.edgeR.s.treatGain.m$start),as.numeric(mr.edgeR.s.treatGain.m$stop),mr.edgeR.s.treatGain.m$ID)
 write.table(mr.edgeR.s.treatGain.m,file=paste("medips_dmrs_hyperTreatment_p",pvalue,".bed",sep=""),append=F,quote=F,sep="\t",row.names=F,col.names=F)
+dmrFiles<-c(dmrFiles,paste("medips_dmrs_hyperTreatment_p",pvalue,".txt",sep=""))
+}
+write.table(dmrFiles,file="dmrFiles.txt",,append=F,quote=F,sep="\t",row.names=F,col.names=F)
 
