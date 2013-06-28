@@ -25,7 +25,7 @@ WORKING=`pwd`
 mkdir ${11}
 echo $WORKING
 echo "$DATE
-useq_output_folder = $1
+dmr_output_folder = $1
 path2genome_fa = $2
 path2genes_gff = $3
 upstream nearest gene threshold (e.g. 10000) = $4
@@ -50,4 +50,8 @@ ${10}/R_scripts/medusaVolcano.R ${16} $WORKING ${11}
 
 echo "perl ${10}/perl_scripts/peaks_in_features_bedtools_wrap_v2.pl $WORKING $WORKING/dmrFiles.txt $7 $8 $6 $9 $GFF_OR_BED ${10}/perl_scripts ${11} ${13} ${14}"
 perl ${10}/perl_scripts/peaks_in_features_bedtools_wrap_v2.pl $WORKING $WORKING/dmrFiles.txt $7 $8 $6 $9 $GFF_OR_BED ${10}/perl_scripts ${11} ${13} ${14}
+
+echo "perl ${10}/perl_scripts/intersect2fisher.pl $WORKING $WORKING/dmrFiles.txt thresholdWindows.bed $6 $7 ${10}/R_scripts ${11}"
+perl ${10}/perl_scripts/intersect2fisher.pl $WORKING $WORKING/dmrFiles.txt thresholdWindows.bed $6 $7 ${10}/R_scripts ${11}
 cd $CURRENT
+
