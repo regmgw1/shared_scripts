@@ -12,14 +12,15 @@ pvalue<-as.numeric(args[length(args)-2])
 path2input<-args[length(args)-1]
 path2output<-args[length(args)]
 
-#treat<-"HN105,HN125,HN39"
-#control<-"HN29,HN32,HN96"
+#treat<-"AST7,AST8,AST9"
+#control<-"NSC1,NSC2,NSC3"
 #species<-"Human"
 #readDepth<-10
 #dmrSize<-500
 #path2output<-"/medical_genomics/tmpFiles/medipsTest_160513/"
 
 library(MEDIPS)
+library(gtools)
 if (species == "Mouse"){
 	bsGenome<-paste("BSgenome.Mmusculus.UCSC.",refName,sep="")
 	library(bsGenome,character.only=T)
@@ -50,17 +51,61 @@ treat.v<-as.character(do.call('rbind', strsplit(as.character(treat), ',', fixed=
 control.v<-as.character(do.call('rbind', strsplit(as.character(control), ',', fixed=TRUE)))
 
 treat.set<-MEDIPS.createSet(BSgenome=genome,file=paste(path2input,"/",treat.v[1],".bed",sep=""),window_size=dmrSize)
-control.set<-MEDIPS.createSet(BSgenome=genome,file=paste(path2input,"/",control.v[1],".bed",sep=""),window_size=dmrSize)
+
+fileName<-paste(treat.v[1],".bed",sep="")
+GRange.Reads<-getGRange(fileName, path2input, 0, 0, NULL, T)
+
+## Build dataframe of genomic coords
+if (length(unique(seqlevels(GRange.Reads))) > 1) 
+{
+	chromosomes = mixedsort(unique(seqlevels(GRange.Reads)))
+}
+if (length(unique(seqlevels(GRange.Reads))) == 1)
+{
+	chromosomes = unique(seqlevels(GRange.Reads))
+}
+dataset<-get(ls(paste("package:", genome, sep = "")))
+chr_lengths<-as.numeric(seqlengths(dataset)[chromosomes])
+no_chr_windows<-ceiling(chr_lengths/dmrSize)
+supersize_chr<-cumsum(no_chr_windows)
+Granges.genomeVec<-MEDIPS.GenomicCoordinates(supersize_chr, no_chr_windows, chromosomes, chr_lengths, dmrSize)
+overlap<-countOverlaps(Granges.genomeVec, GRange.Reads)
+genomicCounts.df<-data.frame(as.data.frame(Granges.genomeVec),overlap)
+colnames(genomicCounts.df)[dim(genomicCounts.df)[2]]<-treat.v[1]
 
 for(i in 2:length(treat.v))
 {
 treat.set<-c(treat.set,MEDIPS.createSet(BSgenome=genome,file=paste(path2input,"/",treat.v[i],".bed",sep=""),window_size=dmrSize))
+fileName<-paste(treat.v[i],".bed",sep="")
+GRange.Reads<-getGRange(fileName, path2input, 0, 0, NULL, T)
+Granges.genomeVec<-MEDIPS.GenomicCoordinates(supersize_chr, no_chr_windows, chromosomes, chr_lengths, dmrSize)
+overlap<-countOverlaps(Granges.genomeVec, GRange.Reads)
+genomicCounts.df<-data.frame(genomicCounts.df,overlap)
+colnames(genomicCounts.df)[dim(genomicCounts.df)[2]]<-treat.v[i]
 }
+
+control.set<-MEDIPS.createSet(BSgenome=genome,file=paste(path2input,"/",control.v[1],".bed",sep=""),window_size=dmrSize)
+fileName<-paste(control.v[1],".bed",sep="")
+GRange.Reads<-getGRange(fileName, path2input, 0, 0, NULL, T)
+Granges.genomeVec<-MEDIPS.GenomicCoordinates(supersize_chr, no_chr_windows, chromosomes, chr_lengths, dmrSize)
+overlap<-countOverlaps(Granges.genomeVec, GRange.Reads)
+genomicCounts.df<-data.frame(genomicCounts.df,overlap)
+colnames(genomicCounts.df)[dim(genomicCounts.df)[2]]<-control.v[1]
 
 for(i in 2:length(control.v))
 {
 control.set<-c(control.set,MEDIPS.createSet(BSgenome=genome,file=paste(path2input,"/",control.v[i],".bed",sep=""),window_size=dmrSize))
+fileName<-paste(control.v[i],".bed",sep="")
+GRange.Reads<-getGRange(fileName, path2input, 0, 0, NULL, T)
+Granges.genomeVec<-MEDIPS.GenomicCoordinates(supersize_chr, no_chr_windows, chromosomes, chr_lengths, dmrSize)
+overlap<-countOverlaps(Granges.genomeVec, GRange.Reads)
+genomicCounts.df<-data.frame(genomicCounts.df,overlap)
+colnames(genomicCounts.df)[dim(genomicCounts.df)[2]]<-control.v[i]
 }
+write.table(genomicCounts.df,file="readCounts_matrix.txt",append=F,quote=F,sep="\t",row.names=F,col.names=T)
+genomicCountsThresh.df<-genomicCounts.df[rowSums(genomicCounts.df[,6:dim(genomicCounts.df)[2]])>=readDepth,]
+genomicCountsThresh.bed<-genomicCountsThresh.df[,1:3]
+write.table(genomicCountsThresh.bed,file="thresholdWindows.bed",append=F,quote=F,sep="\t",row.names=F,col.names=F)
 
 cor.matrix<-MEDIPS.correlation(MSets=c(treat.set,control.set),plot=F)
 write.table(cor.matrix,file="correlation_matrix.txt",append=F,quote=F,sep="\t",row.names=T,col.names=T)
