@@ -15,7 +15,7 @@ gareth.wilson@cancer.ucl.ac.uk
 Use bedTools to generate file for input into R for chi-square analysis
 =head2 Usage
 
-Usage: ./intersect2chi.pl path2allPossiblePeaks path2dmrs path2features path2featureList
+Usage: ./intersect2fisher.pl path2allPossiblePeaks path2dmrs path2features path2featureList
 
 =cut
 
@@ -26,7 +26,7 @@ Usage: ./intersect2chi.pl path2allPossiblePeaks path2dmrs path2features path2fea
 use strict;
 
 unless (@ARGV == 7) {
-        die "\n\nUsage:\n ./intersect2chi.pl path2dmrs path2dmrFile path2allPossiblePeaks path2features path2featureList path2Rscripts path2output\nPlease try again.\n\n\n";}
+        die "\n\nUsage:\n ./intersect2fisher.pl path2dmrs path2dmrFile path2allPossiblePeaks path2features path2featureList path2Rscripts path2output\nPlease try again.\n\n\n";}
 
 my $path2dmrs = shift;
 my $path2dmrlist = shift;
@@ -41,6 +41,7 @@ open (IN, "$path2dmrlist" ) or die "Can't open $path2dmrlist for reading";
 while (my $line = <IN>)
 {
 	chomp $line;
+	$line =~s/.txt//;
 	push @dmr_files, $line;
 }
 close IN;
@@ -49,7 +50,7 @@ foreach my $dmr_set (@dmr_files)
 {
 	my $time = time();
 	open (TMP, ">dmr$time.tmp") or die "Can't open tmp.tmp for writing";
-	open (DMR, $path2dmrs/$dmr_set ) or die "Can't open $path2dmrs/$dmr_set for reading";
+	open (DMR, "$path2dmrs/$dmr_set.bed" ) or die "Can't open $path2dmrs/$dmr_set.bed for reading";
 	while (my $dmrt = <DMR>)
 	{
 		$dmrt =~s/chr//;
@@ -67,7 +68,7 @@ foreach my $dmr_set (@dmr_files)
 	}
 	close ALL;
 	close TMP;
-	open (OUT, ">$path2output/$dmr_file"."_enrichment") or die "Can't open $path2output/$dmr_file"."_enrichment for writing";
+	open (OUT, ">$path2output/$dmr_set"."_enrichment.txt") or die "Can't open $path2output/$dmr_set"."_enrichment.txt for writing";
 	print OUT "Features\tDMRs_in_feature\tTotal_DMRs\tPotential_in_feature\tTotal_potential\n";
 	open (IN, "$path2list" ) or die "Can't open $path2list for reading";
 	while (my $line = <IN>)
@@ -85,5 +86,6 @@ foreach my $dmr_set (@dmr_files)
 	}
 	close IN;
 	close OUT;
-	unlink("peaks$time.tmp","dmr$time.tmp")
+	unlink("peaks$time.tmp","dmr$time.tmp");
+	system "/$path2Rscripts/features_fisher.R $path2output/ $dmr_set";
 }
