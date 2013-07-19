@@ -136,6 +136,7 @@ my $fasta_genome = $genomes->{fasta_genome};
 my $species = $genomes->{species};
 my $ref_name = $genomes->{ref_name};
 my $chrom_list = $genomes->{chrom_list};
+my $sex_dmrs = $genomes->{sex_dmrs};
 
 my $reads = $cfg->param(-block=>'READS');
 my $max_insert = $reads->{max_insert};
@@ -184,7 +185,7 @@ while (my $line = <IN>)
 	print OUT $line;
 }
 close IN;
-close OUT;
+#close OUT;
 
 if ($part1)
 {
@@ -242,7 +243,7 @@ if ($part3)
 	}
 	print "Starting DMR calling\n";
 	my $logout = "$path2filtered/medusa_pipe_pt3.log";
-	system("$path2scripts/medusa_pipeline/medusa_pipe_pt3.sh $treats $controls $species $ref_name $min_read_depth $dmr_size $dmr_pvalue $path2filtered $path2dmr $path2scripts >$logout");
+	system("$path2scripts/medusa_pipeline/medusa_pipe_pt3.sh $treats $controls $species $ref_name $min_read_depth $dmr_size $dmr_pvalue $sex_dmrs $path2filtered $path2dmr $path2scripts >$logout");
 	print "End of pipe part 3\n";
 }
 
