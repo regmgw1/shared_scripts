@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# part 0 of medusa pipeline - written by Gareth Wilson
+# part 1 of medusa pipeline - written by Gareth Wilson
 # runs initial alignment and filtering. Currently performed using BWA (http://bio-bwa.sourceforge.net/) and samtools (http://samtools.sourceforge.net/).
 # limited alignment parameters are passed from medusa.pl. defaults have generally worked well for our data. More parameters can be added if required (edit PARAM_BWA_ALN or PARAM_BWA_SAMPE).
 # in future no reason why other alignment programme can't be used - just need to ensure output is in sam format.
