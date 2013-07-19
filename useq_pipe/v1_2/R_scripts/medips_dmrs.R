@@ -13,12 +13,6 @@ sex<-as.numeric(args[length(args)-2])
 path2input<-args[length(args)-1]
 path2output<-args[length(args)]
 
-#treat<-"AST7,AST8,AST9"
-#control<-"NSC1,NSC2,NSC3"
-#species<-"Human"
-#readDepth<-10
-#dmrSize<-500
-#path2output<-"/medical_genomics/tmpFiles/medipsTest_160513/"
 
 library(MEDIPS)
 library(gtools)

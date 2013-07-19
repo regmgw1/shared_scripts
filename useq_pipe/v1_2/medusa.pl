@@ -177,12 +177,12 @@ unless(-d $path2alignment)
 
 my $time = time();
 my $tmp_cfg = "medusa_config_".$time.".txt";
-#open (OUT, ">$path2alignment/$tmp_cfg") or die "Can't open $path2alignment/$tmp_cfg for writing";
-#print OUT "Treatment samples = $treats\nControl samples = $controls\n\n";
+open (OUT, ">$path2alignment/$tmp_cfg") or die "Can't open $path2alignment/$tmp_cfg for writing";
+print OUT "Treatment samples = $treats\nControl samples = $controls\n\n";
 open (IN, "$config_file" ) or die "Can't open $config_file for reading";
 while (my $line = <IN>)
 {
-	#print OUT $line;
+	print OUT $line;
 }
 close IN;
 #close OUT;
@@ -243,8 +243,7 @@ if ($part3)
 	}
 	print "Starting DMR calling\n";
 	my $logout = "$path2filtered/medusa_pipe_pt3.log";
-	#system("$path2scripts/medusa_pipeline/medusa_pipe_pt3.sh $treats $controls $species $ref_name $min_read_depth $dmr_size $dmr_pvalue $sex_dmrs $path2filtered $path2dmr $path2scripts >$logout");
-	system("$path2scripts/medusa_pipeline/medusa_pipe_pt3.sh $treats $controls $species $ref_name $min_read_depth $dmr_size $dmr_pvalue $sex_dmrs $path2filtered $path2dmr $path2scripts");
+	system("$path2scripts/medusa_pipeline/medusa_pipe_pt3.sh $treats $controls $species $ref_name $min_read_depth $dmr_size $dmr_pvalue $sex_dmrs $path2filtered $path2dmr $path2scripts >$logout");
 	print "End of pipe part 3\n";
 }
 
