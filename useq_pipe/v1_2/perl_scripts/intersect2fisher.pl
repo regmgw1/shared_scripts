@@ -78,7 +78,7 @@ foreach my $dmr_set (@dmr_files)
 		chomp $dmr;
 		my $totalfeat = `bash -c 'cat <(intersectBed -f 0.51 -a peaks$time.tmp -b $path2features/$line/$line.gff  -wa | cut -f 1-3) <(intersectBed -f 0.51 -b peaks$time.tmp -a $path2features/$line/$line.gff -wa -wb | cut -f 10-12) | sortBed | mergeBed |  wc -l'`;
 		chomp $totalfeat;
-		my $totaldmr = `bash -c 'cat <(intersectBed -f 0.51  -a peaks$time.tmp -b dmr$time.tmp -wa | cut -f 1-3) <(intersectBed -f 0.51 -b peaks$time.tmp -a dmr$time.tmp -wa -wb | cut -f 4-6) | sortBed | mergeBed | wc -l'`;
+		my $totaldmr = `bash -c 'cat <(intersectBed -f 0.51  -a peaks$time.tmp -b dmr$time.tmp -wa | cut -f 1-3) <(intersectBed -f 0.51 -b peaks$time.tmp -a dmr$time.tmp -wa -wb | cut -f 5-7) | sortBed | mergeBed | wc -l'`;
 		chomp $totaldmr;
 		my $total = `grep ^chr $path2all|wc -l`;
 		chomp $total;
